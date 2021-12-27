@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "72955196854",
+    "project_id": "fitgain-8033c",
+    "storage_bucket": "fitgain-8033c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72955196854:android:f6d12f2d4037158ffbfd17",
+        "android_client_info": {
+          "package_name": "com.wdsm.fitgain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72955196854-m95su60ntofrrdrd8j4koqdclrcd8fbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wdsm.fitgain",
+            "certificate_hash": "166e59556456445022a442fb38793f8bc1006c28"
+          }
+        },
+        {
+          "client_id": "72955196854-d3j3onp6qb7mdv2hjjanf0jefkcuor5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKluSDLjdnClu7KSLa5ZMY8zDLi0IQQgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72955196854-d3j3onp6qb7mdv2hjjanf0jefkcuor5f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

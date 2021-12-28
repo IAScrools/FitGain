@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.Login">
 
     <Button
         android:id="@+id/bSign"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etPass" />
 
     <EditText
-        android:id="@+id/etLog"
+        android:id="@+id/etEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -40,7 +40,7 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLog" />
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
     <TextView
         android:id="@+id/tRegister"

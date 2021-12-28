@@ -4,41 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".Activities.Register">
 
     <Button
         android:id="@+id/bSign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="158dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="75dp"
         android:text="Signin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPass" />
 
     <EditText
-        android:id="@+id/etLog"
+        android:id="@+id/etEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="164dp"
         android:ems="10"
-        android:hint="Login"
+        android:hint="Email"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/etLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="Login"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+    <EditText
         android:id="@+id/etPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="25dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLog" />
+        app:layout_constraintTop_toBottomOf="@+id/etLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

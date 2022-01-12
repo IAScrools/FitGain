@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class Register extends AppCompatActivity {
 
     private EditText etEmail, etLogin, etPass;
-    private Button bSing;
+    private Button bSing, bBack;
     private FirebaseAuth firebaseAuth;
     private String email, login, password;
 
@@ -40,6 +41,15 @@ public class Register extends AppCompatActivity {
         etLogin = (EditText) findViewById(R.id.etLogin);
         etPass = (EditText) findViewById(R.id.etPass);
         bSing = (Button) findViewById(R.id.bSign);
+        bBack = (Button) findViewById(R.id.bBack);
+
+        bBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                startActivity(new Intent(Register.this, Login.class));
+            }
+        });
 
         bSing.setOnClickListener(new View.OnClickListener() {
             @Override

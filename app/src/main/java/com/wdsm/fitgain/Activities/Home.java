@@ -16,7 +16,7 @@ public class Home extends AppCompatActivity {
     private Button bBack;
     private TextView logOut;
     private FirebaseAuth firebaseAuth;
-
+    private Button toProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class Home extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (TextView) findViewById(R.id.tvLogOut);
+        toProducts = (Button) findViewById(R.id.kButton);
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +39,13 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseAuth.signOut();
                 startActivity(new Intent(Home.this, Login.class));
+            }
+        });
+
+        toProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Home.this, Products.class));
             }
         });
     }

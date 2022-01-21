@@ -1,49 +1,77 @@
 package com.wdsm.fitgain.Entities;
 
-import java.util.List;
+import com.google.firebase.database.PropertyName;
 
 public class Book {
-    private String Title;
-    private String Author;
-    private String Date;
-    private List Content;
 
-    public Book(String title, String author, String date, List content) {
+    @PropertyName("Title")
+    private String Title;
+
+    @PropertyName("Author")
+    private String Author;
+
+    @PropertyName("Date")
+    private String Date;
+
+    @PropertyName("Description")
+    private String Description;
+
+    @PropertyName("Content")
+    private String Content;
+
+    @PropertyName("Points")
+    private int Points;
+
+    public int getPoints() {
+        return Points;
+    }
+
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public Book(String title, String author, String date, String description, String content, int points) {
         Title = title;
         Author = author;
         Date = date;
+        Description = description;
         Content = content;
+        Points = points;
+    }
+
+    public Book() {
     }
 
     public String getTitle() {
         return Title;
     }
 
-    public void setTitle(String title) {
-        Title = title;
-    }
-
     public String getAuthor() {
         return Author;
-    }
-
-    public void setAuthor(String author) {
-        Author = author;
     }
 
     public String getDate() {
         return Date;
     }
 
-    public void setDate(String date) {
-        Date = date;
+    public String toStringPreview()
+    {
+        String newLine = System.getProperty("line.separator");
+        return getTitle() + newLine
+                + getAuthor()
+                + " (" + getDate() + ")"
+                ;
     }
 
-    public List getContent() {
-        return Content;
+    public String toStringFull()
+    {
+        String newLine = System.getProperty("line.separator");
+        return getTitle() + newLine
+                + getAuthor()
+                + " (" + getDate() + ")"
+                + newLine + newLine + getDescription() + newLine + newLine
+                + "Punkty potrzebne do odblokowania: " + getPoints();
     }
 
-    public void setContent(List content) {
-        Content = content;
-    }
 }

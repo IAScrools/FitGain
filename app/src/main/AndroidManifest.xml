@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitGain">
         <activity
+            android:name=".Activities.ProductDetails"
+            android:exported="true" />
+        <activity
             android:name=".Activities.Products"
             android:exported="true" />
         <activity
@@ -29,7 +32,7 @@
             android:exported="false" />
         <activity
             android:name=".Activities.Login"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

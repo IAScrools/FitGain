@@ -12,10 +12,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.wdsm.fitgain.R;
 
-public class ProductDetails extends AppCompatActivity {
-
-    private EditText bookFullInfo;
-    private Button unlockBook;
+public class UnlockBook extends AppCompatActivity {
+    private EditText bookContent;
     private Button bBack;
     private TextView logOut;
     private FirebaseAuth firebaseAuth;
@@ -23,25 +21,23 @@ public class ProductDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_details);
+        setContentView(R.layout.activity_unlock_book);
+
+        bookContent = (EditText) findViewById(R.id.BookContent);
+        bookContent.setKeyListener(null);
+        Bundle b = getIntent().getExtras();
+        String content = b.getString("Content");
+        bookContent.setText(content);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        Bundle b = getIntent().getExtras();
-        String book = b.getString("Book");
-        String content = b.getString("Content");
-
-        bookFullInfo = (EditText) findViewById(R.id.BookFullInfo);
-        unlockBook = (Button) findViewById(R.id.UnlockBook);
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (TextView) findViewById(R.id.tvLogOut);
-        bookFullInfo.setKeyListener(null);
-        bookFullInfo.setText(book);
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProductDetails.this, Products.class));
+                startActivity(new Intent(UnlockBook.this, Products.class));
             }
         });
 
@@ -49,16 +45,7 @@ public class ProductDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 firebaseAuth.signOut();
-                startActivity(new Intent(ProductDetails.this, Login.class));
-            }
-        });
-
-        unlockBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(ProductDetails.this, UnlockBook.class);
-                i.putExtra("Content", content);
-                startActivity(i);
+                startActivity(new Intent(UnlockBook.this, Login.class));
             }
         });
     }

@@ -10,11 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitGain">
         <activity
+            android:name=".Activities.UnlockBook"
+            android:exported="true" />
+        <activity
             android:name=".Activities.ProductDetails"
             android:exported="true" />
         <activity
             android:name=".Activities.Products"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".Activities.Splash"
             android:exported="true">

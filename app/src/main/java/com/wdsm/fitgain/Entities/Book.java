@@ -55,6 +55,11 @@ public class Book {
         return Date;
     }
 
+    public String getContent() {
+        String newLine = System.getProperty("line.separator");
+        return getTitle() + newLine + newLine + Content;
+    }
+
     public String toStringPreview()
     {
         String newLine = System.getProperty("line.separator");

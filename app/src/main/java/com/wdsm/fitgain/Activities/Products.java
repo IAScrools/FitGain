@@ -88,6 +88,7 @@ public class Products extends AppCompatActivity {
         ArrayList<Book> books = new ArrayList<>();
         ArrayList<String> booksStringPreview = new ArrayList<>();
         ArrayList<String> booksStringFull = new ArrayList<>();
+        ArrayList<String> booksStringContent = new ArrayList<>();
 
         if (bookTitle.length() > 2)
         {
@@ -103,10 +104,12 @@ public class Products extends AppCompatActivity {
                                 for (int i = 0; i < books.size(); i++) {
                                     booksStringPreview.add(books.get(i).toStringPreview());
                                     booksStringFull.add(books.get(i).toStringFull());
+                                    booksStringContent.add(books.get(i).getContent());
                                 }
 
                                 Collections.sort(booksStringPreview);
                                 Collections.sort(booksStringFull);
+                                Collections.sort(booksStringContent);
 
                                 ArrayAdapter adapter = new ArrayAdapter<String>(Products.this,
                                         android.R.layout.simple_list_item_1, booksStringPreview);
@@ -117,6 +120,7 @@ public class Products extends AppCompatActivity {
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         Intent i = new Intent(Products.this, ProductDetails.class);
                                         i.putExtra("Book", booksStringFull.get(position));
+                                        i.putExtra("Content", booksStringContent.get(position));
                                         startActivity(i);
                                     }
                                 });
@@ -140,10 +144,12 @@ public class Products extends AppCompatActivity {
                                 for (int i = 0; i < books.size(); i++) {
                                     booksStringPreview.add(books.get(i).toStringPreview());
                                     booksStringFull.add(books.get(i).toStringFull());
+                                    booksStringContent.add(books.get(i).getContent());
                                 }
 
                                 Collections.sort(booksStringPreview);
                                 Collections.sort(booksStringFull);
+                                Collections.sort(booksStringContent);
 
                                 ArrayAdapter adapter = new ArrayAdapter<String>(Products.this,
                                         android.R.layout.simple_list_item_1, booksStringPreview);
@@ -154,6 +160,7 @@ public class Products extends AppCompatActivity {
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         Intent i = new Intent(Products.this, ProductDetails.class);
                                         i.putExtra("Book", booksStringFull.get(position));
+                                        i.putExtra("Content", booksStringContent.get(position));
                                         startActivity(i);
                                     }
                                 });

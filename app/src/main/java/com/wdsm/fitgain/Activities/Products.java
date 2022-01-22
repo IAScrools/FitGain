@@ -10,11 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,6 +32,9 @@ public class Products extends AppCompatActivity {
     private Button searchButton;
     private EditText bTitle;
     private ListView booksList;
+    private Button bBack;
+    private TextView logOut;
+    private FirebaseAuth firebaseAuth;
     private static final String TAG = "Getting book";
 
     @Override
@@ -39,9 +44,28 @@ public class Products extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         searchButton = (Button) findViewById(R.id.SearchButton);
         bTitle = (EditText) findViewById(R.id.BookTitle);
         booksList = (ListView) findViewById(R.id.BooksList);
+        bBack = (Button) findViewById(R.id.bBack);
+        logOut = (TextView) findViewById(R.id.tvLogOut);
+
+        bBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Products.this, Home.class));
+            }
+        });
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                startActivity(new Intent(Products.this, Login.class));
+            }
+        });
 
         bTitle.setOnClickListener(new View.OnClickListener() {
             @Override

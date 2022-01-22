@@ -3,33 +3,43 @@ package com.wdsm.fitgain.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.data.DataPoint;
+import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.wdsm.fitgain.R;
-import com.wdsm.fitgain.Utils.FitnessDataUtils;
+import com.wdsm.fitgain.Utils.PermissionsUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Home extends AppCompatActivity {
 
     private Button bBack;
     private TextView logOut;
     private FirebaseAuth firebaseAuth;
+    private final String TAG = this.getClass().getSimpleName();
 
+    String androidPermissions = Manifest.permission.ACTIVITY_RECOGNITION;
     FitnessOptions fitnessOptions = FitnessOptions.builder()
-            .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .build();
-    String dataType = Manifest.permission.ACTIVITY_RECOGNITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +49,14 @@ public class Home extends AppCompatActivity {
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (TextView) findViewById(R.id.tvLogOut);
 
-        if (FitnessDataUtils.checkAndroidPermissions(this, dataType)) {
-            FitnessDataUtils.requestAndroidPermissions(this,dataType);
+        if (PermissionsUtils.checkAndroidPermissions(this, androidPermissions)) {
+            PermissionsUtils.requestAndroidPermissions(this, androidPermissions);
         }
 
-        if (!FitnessDataUtils.checkGoogleFitPermissions(this, fitnessOptions)) {
-            FitnessDataUtils.requestGoogleFitPermissions(this, this, fitnessOptions);
+        GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(this, fitnessOptions);
+
+        if (!PermissionsUtils.checkGoogleFitPermissions(this, account, fitnessOptions)) {
+            PermissionsUtils.requestGoogleFitPermissions(this, this,account, fitnessOptions);
         }
 
         Timestamp startDate = new Timestamp(new Date());
@@ -63,7 +75,23 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        System.out.println(FitnessDataUtils.getActivityValueFromRange(this, startDate, endDate, DataType.TYPE_STEP_COUNT_DELTA));
+        AtomicLong total = new AtomicLong();
+
+        DataReadRequest dataReadRequest = new DataReadRequest.Builder()
+                .read(DataType.TYPE_STEP_COUNT_DELTA)
+                .setTimeRange(startDate.toDate().getTime(), endDate.toDate().getTime(), TimeUnit.MILLISECONDS)
+                .build();
+
+        Fitness.getHistoryClient(this, account)
+                .readData(dataReadRequest)
+                .addOnSuccessListener(response -> {
+                    DataSet dataSet = response.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
+                    for (DataPoint dataPoint : dataSet.getDataPoints()) {
+                        total.addAndGet(dataPoint.getValue(Field.FIELD_STEPS).asInt());
+                    }
+                    Log.i(TAG, Long.toString(total.get()));
+                    // access step count here
+                });
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override

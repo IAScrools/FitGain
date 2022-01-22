@@ -59,9 +59,10 @@ public class FitnessDataUtils {
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
-    public static boolean checkStepCountPermissions(@NonNull Context context,
-                                                    @NonNull Activity activity,
-                                                    @NonNull GoogleSignInAccount account) {
+    public static boolean checkAndRequestStepCountPermissions(
+            @NonNull Context context,
+            @NonNull Activity activity,
+            @NonNull GoogleSignInAccount account) {
 
         String androidPermissions = Manifest.permission.ACTIVITY_RECOGNITION;
         FitnessOptions fitnessOptions = getStepCountDeltaFitnessOptions();
@@ -82,7 +83,7 @@ public class FitnessDataUtils {
         return true;
     }
 
-    public static void updateStepCount (
+    public static void updateStepCount(
             @NonNull Context context,
             @NonNull Activity activity,
             @NonNull String TAG
@@ -91,7 +92,7 @@ public class FitnessDataUtils {
         FitnessOptions fitnessOptions = getStepCountDeltaFitnessOptions();
         GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(context, fitnessOptions);
 
-        if (!checkStepCountPermissions(context, activity, account)) {
+        if (!checkAndRequestStepCountPermissions(context, activity, account)) {
             Log.w(TAG, "Permissions denied, user data update aborted.");
             return;
         }
@@ -140,7 +141,7 @@ public class FitnessDataUtils {
                     }
                     // update Firestore
                     dc.update("steps", FieldValue.increment(total));
-                    dc.update("coins", FieldValue.increment(total / 100));
+                    dc.update("coins", FieldValue.increment((double) total / 100));
                     dc.update("lastCheck", endDate);
                 });
     }

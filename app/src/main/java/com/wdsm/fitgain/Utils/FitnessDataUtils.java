@@ -92,7 +92,7 @@ public class FitnessDataUtils {
         GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(context, fitnessOptions);
 
         if (!checkStepCountPermissions(context, activity, account)) {
-            Log.w(TAG, "Permissions denied!");
+            Log.w(TAG, "Permissions denied, user data update aborted.");
             return;
         }
 
@@ -110,8 +110,8 @@ public class FitnessDataUtils {
                 try {
                     startDate = getTodayTimestamp();
                 } catch (ParseException parseException) {
-                    Log.w(TAG, "Unable to create Timestamp, using current time instead");
-                    startDate = new Timestamp(new Date());
+                    Log.w(TAG, "Unable to create Timestamp, user data update aborted.");
+                    return;
                 }
             }
             updateStepsAndCoins(context, account, startDate, endDate, dc);

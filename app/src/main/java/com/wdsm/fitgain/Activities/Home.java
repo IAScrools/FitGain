@@ -18,9 +18,12 @@ import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
+import com.google.android.gms.fitness.result.DataReadResponse;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.wdsm.fitgain.R;
+import com.wdsm.fitgain.Utils.FitnessDataUtils;
 import com.wdsm.fitgain.Utils.PermissionsUtils;
 
 import java.text.ParseException;
@@ -53,10 +56,11 @@ public class Home extends AppCompatActivity {
             PermissionsUtils.requestAndroidPermissions(this, androidPermissions);
         }
 
-        GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(this, fitnessOptions);
+        GoogleSignInAccount account
+                = PermissionsUtils.getGoogleAccount(this, fitnessOptions);
 
-        if (!PermissionsUtils.checkGoogleFitPermissions(this, account, fitnessOptions)) {
-            PermissionsUtils.requestGoogleFitPermissions(this, this,account, fitnessOptions);
+        if (!PermissionsUtils.checkGoogleFitPermissions(account, fitnessOptions)) {
+            PermissionsUtils.requestGoogleFitPermissions(this, account, fitnessOptions);
         }
 
         Timestamp startDate = new Timestamp(new Date());
@@ -75,21 +79,14 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        AtomicLong total = new AtomicLong();
-
-        DataReadRequest dataReadRequest = new DataReadRequest.Builder()
-                .read(DataType.TYPE_STEP_COUNT_DELTA)
-                .setTimeRange(startDate.toDate().getTime(), endDate.toDate().getTime(), TimeUnit.MILLISECONDS)
-                .build();
-
-        Fitness.getHistoryClient(this, account)
-                .readData(dataReadRequest)
+        FitnessDataUtils.getStepCountDeltaHistoryClient(this, account, startDate, endDate)
                 .addOnSuccessListener(response -> {
+                    Long total = 0L;
                     DataSet dataSet = response.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
                     for (DataPoint dataPoint : dataSet.getDataPoints()) {
-                        total.addAndGet(dataPoint.getValue(Field.FIELD_STEPS).asInt());
+                        total += dataPoint.getValue(Field.FIELD_STEPS).asInt();
                     }
-                    Log.i(TAG, Long.toString(total.get()));
+                    Log.i(TAG, Long.toString(total));
                     // access step count here
                 });
 

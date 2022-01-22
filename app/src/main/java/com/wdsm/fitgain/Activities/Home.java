@@ -1,6 +1,5 @@
 package com.wdsm.fitgain.Activities;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,34 +9,20 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataPoint;
-import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResponse;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.wdsm.fitgain.R;
 import com.wdsm.fitgain.Utils.FitnessDataUtils;
-import com.wdsm.fitgain.Utils.PermissionsUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Home extends AppCompatActivity {
 
-    private Button bBack;
-    private TextView logOut;
-    private FirebaseAuth firebaseAuth;
     private final String TAG = this.getClass().getSimpleName();
+    private Button bBack;
+    private Button bDataUpdate;
+    private TextView logOut;
+    private TextView coins;
+    private TextView stepCount;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +31,12 @@ public class Home extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (TextView) findViewById(R.id.tvLogOut);
+        coins = findViewById(R.id.tvUserCoins);
+        stepCount = findViewById(R.id.tvUserStepCount);
+        bDataUpdate = findViewById(R.id.bDataUpdate);
 
         FitnessDataUtils.updateStepCount(this, this, TAG);
+        updateUserCoinAndStepCountFromFirebase();
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +50,24 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseAuth.signOut();
                 startActivity(new Intent(Home.this, Login.class));
+            }
+        });
+
+        bDataUpdate.setOnClickListener(v -> {
+            FitnessDataUtils.updateStepCount(this, this, TAG);
+        });
+    }
+
+    private void updateUserCoinAndStepCountFromFirebase() {
+        DocumentReference dc = FitnessDataUtils.getUserFirestoreDocument();
+        dc.addSnapshotListener((snapshot, e) -> {
+            if (snapshot != null && snapshot.exists() && e == null) {
+                Log.d(TAG, "Current data: " + snapshot.getData());
+                coins.setText("Punkty: " + ((Double) snapshot.get("coins")).longValue());
+                stepCount.setText("Łączna zgromadzona liczba kroków: " + snapshot.get("steps"));
+            } else {
+                coins.setText("Nie można wczytać danych");
+                stepCount.setText("");
             }
         });
     }

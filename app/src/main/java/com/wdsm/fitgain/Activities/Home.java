@@ -39,11 +39,6 @@ public class Home extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private final String TAG = this.getClass().getSimpleName();
 
-    String androidPermissions = Manifest.permission.ACTIVITY_RECOGNITION;
-    FitnessOptions fitnessOptions = FitnessOptions.builder()
-            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-            .build();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,43 +47,7 @@ public class Home extends AppCompatActivity {
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (TextView) findViewById(R.id.tvLogOut);
 
-        if (PermissionsUtils.checkAndroidPermissions(this, androidPermissions)) {
-            PermissionsUtils.requestAndroidPermissions(this, androidPermissions);
-        }
-
-        GoogleSignInAccount account
-                = PermissionsUtils.getGoogleAccount(this, fitnessOptions);
-
-        if (!PermissionsUtils.checkGoogleFitPermissions(account, fitnessOptions)) {
-            PermissionsUtils.requestGoogleFitPermissions(this, account, fitnessOptions);
-        }
-
-        Timestamp startDate = new Timestamp(new Date());
-        Timestamp endDate = new Timestamp(new Date());
-
-        // set startDate and endDate values for testing purposes
-        // replace with data from Firebase
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
-        String startDateString = "21-01-2022 21:16:00";
-        String endDateString = "21-01-2022 22:35:00";
-
-        try {
-            startDate = new Timestamp(sdf.parse(startDateString));
-            endDate = new Timestamp(sdf.parse(endDateString));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        FitnessDataUtils.getStepCountDeltaHistoryClient(this, account, startDate, endDate)
-                .addOnSuccessListener(response -> {
-                    Long total = 0L;
-                    DataSet dataSet = response.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
-                    for (DataPoint dataPoint : dataSet.getDataPoints()) {
-                        total += dataPoint.getValue(Field.FIELD_STEPS).asInt();
-                    }
-                    Log.i(TAG, Long.toString(total));
-                    // access step count here
-                });
+        FitnessDataUtils.updateStepCount(this, this, TAG);
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override

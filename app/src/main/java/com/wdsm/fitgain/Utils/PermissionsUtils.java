@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.fitness.FitnessOptions;
 
 public class PermissionsUtils {
+    
     public static GoogleSignInAccount getGoogleAccount(@NonNull Context content,
                                                        @NonNull FitnessOptions fitnessOptions) {
         return GoogleSignIn.getAccountForExtension(content, fitnessOptions);

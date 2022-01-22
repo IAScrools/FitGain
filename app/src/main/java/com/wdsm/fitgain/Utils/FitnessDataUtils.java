@@ -23,10 +23,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class FitnessDataUtils {
+
     public static final FitnessOptions getStepCountDeltaFitnessOptions() {
         return FitnessOptions.builder()
                 .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
@@ -96,17 +99,30 @@ public class FitnessDataUtils {
         DocumentReference dc = getUserFirestoreDocument();
 
         dc.get().addOnSuccessListener( response -> {
-            Timestamp startDate = new Timestamp(new Date());
+            Timestamp startDate;
             Timestamp endDate = new Timestamp(new Date());
             try {
-            startDate = response.getTimestamp("lastCheck");
-            } catch (RuntimeException e) {
-                // TODO set custom (e.g. today at 00:00:00) Timestamp if not exist on Firestore
-                Log.i(TAG, "Error occured: " + e.getMessage());
-                e.printStackTrace();
+                startDate = response.getTimestamp("lastCheck");
+                if (startDate == null) {
+                    throw new NullPointerException();
+                }
+            } catch (Exception e) {
+                try {
+                    startDate = getTodayTimestamp();
+                } catch (ParseException parseException) {
+                    Log.w(TAG, "Unable to create Timestamp, using current time instead");
+                    startDate = new Timestamp(new Date());
+                }
             }
             updateStepsAndCoins(context, account, startDate, endDate, dc);
         });
+    }
+
+    private static Timestamp getTodayTimestamp() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00.0");
+        Date d = new Date();
+        d = formatter.parse(formatter.format(d));
+        return new Timestamp(d);
     }
 
     private static void updateStepsAndCoins(

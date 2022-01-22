@@ -75,19 +75,15 @@ public class FitnessDataUtils {
             PermissionsUtils.requestGoogleFitPermissions(activity, account, fitnessOptions);
         }
 
-        if (!PermissionsUtils.checkAndroidPermissions(context, androidPermissions)
-                || !PermissionsUtils.checkGoogleFitPermissions(account, fitnessOptions)) {
-            return false;
-        }
-
-        return true;
+        return PermissionsUtils.checkAndroidPermissions(context, androidPermissions)
+                && PermissionsUtils.checkGoogleFitPermissions(account, fitnessOptions);
     }
 
     public static void updateStepCount(
             @NonNull Context context,
             @NonNull Activity activity,
             @NonNull String TAG
-            ) {
+    ) {
 
         FitnessOptions fitnessOptions = getStepCountDeltaFitnessOptions();
         GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(context, fitnessOptions);
@@ -99,7 +95,7 @@ public class FitnessDataUtils {
 
         DocumentReference dc = getUserFirestoreDocument();
 
-        dc.get().addOnSuccessListener( response -> {
+        dc.get().addOnSuccessListener(response -> {
             Timestamp startDate;
             Timestamp endDate = new Timestamp(new Date());
             try {

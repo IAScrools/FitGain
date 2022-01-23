@@ -81,15 +81,16 @@ public class FitnessDataUtils {
 
     public static void updateStepCount(
             @NonNull Context context,
-            @NonNull Activity activity,
-            @NonNull String TAG
+            @NonNull Activity activity
     ) {
 
         FitnessOptions fitnessOptions = getStepCountDeltaFitnessOptions();
         GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(context, fitnessOptions);
 
         if (!checkAndRequestStepCountPermissions(context, activity, account)) {
-            Log.w(TAG, "Permissions denied, user data update aborted.");
+            Log.w(
+                    FitnessDataUtils.class.getSimpleName(),
+                    "Permissions denied, user data update aborted.");
             return;
         }
 
@@ -107,7 +108,9 @@ public class FitnessDataUtils {
                 try {
                     startDate = getTodayTimestamp();
                 } catch (ParseException parseException) {
-                    Log.w(TAG, "Unable to create Timestamp, user data update aborted.");
+                    Log.w(
+                            FitnessDataUtils.class.getSimpleName(),
+                            "Unable to create Timestamp, user data update aborted.");
                     return;
                 }
             }

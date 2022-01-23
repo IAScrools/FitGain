@@ -66,12 +66,11 @@
             android:layout_height="wrap_content"
             android:text="Back" />
 
-        <TextView
-            android:id="@+id/tvLogOut"
+        <Button
+            android:id="@+id/bLogOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:paddingRight="10dp"
+            android:layout_gravity="end"
             android:text="Log out" />
 
     </androidx.appcompat.widget.Toolbar>

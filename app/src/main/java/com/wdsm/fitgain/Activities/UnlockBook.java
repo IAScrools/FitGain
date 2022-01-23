@@ -15,7 +15,7 @@ import com.wdsm.fitgain.R;
 public class UnlockBook extends AppCompatActivity {
     private EditText bookContent;
     private Button bBack;
-    private TextView logOut;
+    private Button logOut;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -32,7 +32,7 @@ public class UnlockBook extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         bBack = (Button) findViewById(R.id.bBack);
-        logOut = (TextView) findViewById(R.id.tvLogOut);
+        logOut = (Button) findViewById(R.id.bLogOut);
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override

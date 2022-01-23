@@ -17,7 +17,7 @@ public class ProductDetails extends AppCompatActivity {
     private EditText bookFullInfo;
     private Button unlockBook;
     private Button bBack;
-    private TextView logOut;
+    private Button logOut;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -34,7 +34,7 @@ public class ProductDetails extends AppCompatActivity {
         bookFullInfo = (EditText) findViewById(R.id.BookFullInfo);
         unlockBook = (Button) findViewById(R.id.UnlockBook);
         bBack = (Button) findViewById(R.id.bBack);
-        logOut = (TextView) findViewById(R.id.tvLogOut);
+        logOut = (Button) findViewById(R.id.bLogOut);
         bookFullInfo.setKeyListener(null);
         bookFullInfo.setText(book);
 

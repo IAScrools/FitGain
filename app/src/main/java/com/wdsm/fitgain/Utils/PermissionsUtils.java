@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -31,7 +32,7 @@ public class PermissionsUtils {
 
     public static void requestAndroidPermissions(@NonNull Activity activity,
                                                  @NonNull String... permissions) {
-        activity.requestPermissions(permissions, 1);
+        ActivityCompat.requestPermissions(activity, permissions, 1);
     }
 
     public static boolean checkAndroidPermissions(@NonNull Context context,

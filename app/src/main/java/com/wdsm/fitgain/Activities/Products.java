@@ -33,7 +33,7 @@ public class Products extends AppCompatActivity {
     private EditText bTitle;
     private ListView booksList;
     private Button bBack;
-    private TextView logOut;
+    private Button logOut;
     private FirebaseAuth firebaseAuth;
     private static final String TAG = "Getting book";
 
@@ -50,7 +50,7 @@ public class Products extends AppCompatActivity {
         bTitle = (EditText) findViewById(R.id.BookTitle);
         booksList = (ListView) findViewById(R.id.BooksList);
         bBack = (Button) findViewById(R.id.bBack);
-        logOut = (TextView) findViewById(R.id.tvLogOut);
+        logOut = (Button) findViewById(R.id.bLogOut);
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override

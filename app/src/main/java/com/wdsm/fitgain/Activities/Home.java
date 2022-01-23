@@ -23,6 +23,7 @@ public class Home extends AppCompatActivity {
     private TextView coins;
     private TextView stepCount;
     private FirebaseAuth firebaseAuth;
+    private Button toProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class Home extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (TextView) findViewById(R.id.tvLogOut);
+        toProducts = (Button) findViewById(R.id.kButton);
         coins = findViewById(R.id.tvUserCoins);
         stepCount = findViewById(R.id.tvUserStepCount);
         bDataUpdate = findViewById(R.id.bDataUpdate);
@@ -50,6 +52,13 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseAuth.signOut();
                 startActivity(new Intent(Home.this, Login.class));
+            }
+        });
+
+        toProducts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Home.this, Products.class));
             }
         });
 

@@ -62,20 +62,28 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        bDataUpdate.setOnClickListener(v -> {
-            FitnessDataUtils.updateStepCount(this, this, TAG);
+        srlRefresh.setColorSchemeResources(
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        srlRefresh.setOnRefreshListener(() -> {
+            FitnessDataUtils.updateStepCount(Home.this, Home.this);
+            srlRefresh.setRefreshing(false);
         });
     }
 
-    private void updateUserCoinAndStepCountFromFirebase() {
+    public void updateUserCoinAndStepCountFromFirebase() {
         DocumentReference dc = FitnessDataUtils.getUserFirestoreDocument();
         dc.addSnapshotListener((snapshot, e) -> {
-            if (snapshot != null && snapshot.exists() && e == null) {
-                Log.d(TAG, "Current data: " + snapshot.getData());
+            if (snapshot != null && snapshot.exists() && e == null
+                    && (snapshot.get("coins")) != null
+                    && (snapshot.get("steps")) != null) {
                 coins.setText("Punkty: " + ((Double) snapshot.get("coins")).longValue());
                 stepCount.setText("Łączna zgromadzona liczba kroków: " + snapshot.get("steps"));
             } else {
-                coins.setText("Nie można wczytać danych");
+                coins.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                coins.setText("Nie wczytano danych, spróbuj odświeżyć aplikację");
                 stepCount.setText("");
             }
         });

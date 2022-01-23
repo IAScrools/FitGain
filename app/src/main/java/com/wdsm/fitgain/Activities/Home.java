@@ -17,6 +17,7 @@ import com.wdsm.fitgain.Utils.FitnessDataUtils;
 public class Home extends AppCompatActivity {
 
     private Button logOut;
+    private Button unlocked;
     private TextView coins;
     private TextView stepCount;
     private FirebaseAuth firebaseAuth;
@@ -33,6 +34,7 @@ public class Home extends AppCompatActivity {
         coins = findViewById(R.id.tvUserCoins);
         stepCount = findViewById(R.id.tvUserStepCount);
         srlRefresh = findViewById(R.id.srlRefresh);
+        unlocked = findViewById(R.id.bOdblokowane);
 
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +63,13 @@ public class Home extends AppCompatActivity {
 
         FitnessDataUtils.updateStepCount(Home.this, Home.this);
         updateUserCoinAndStepCountFromFirebase();
+
+        unlocked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Home.this, UnlockedBooks.class));
+            }
+        });
     }
 
 

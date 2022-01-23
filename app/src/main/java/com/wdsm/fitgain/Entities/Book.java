@@ -31,6 +31,9 @@ public class Book {
         return Description;
     }
 
+    public Book() {
+    }
+
     public Book(String title, String author, String date, String description, String content, int points) {
         Title = title;
         Author = author;
@@ -38,9 +41,6 @@ public class Book {
         Description = description;
         Content = content;
         Points = points;
-    }
-
-    public Book() {
     }
 
     public String getTitle() {

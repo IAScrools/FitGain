@@ -24,6 +24,7 @@ import com.wdsm.fitgain.Entities.Book;
 import com.wdsm.fitgain.R;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Products extends AppCompatActivity {
@@ -51,6 +52,9 @@ public class Products extends AppCompatActivity {
         booksList = (ListView) findViewById(R.id.BooksList);
         bBack = (Button) findViewById(R.id.bBack);
         logOut = (Button) findViewById(R.id.bLogOut);
+
+        bookTitle = bTitle.getText().toString();
+        getAllBooks();
 
         bBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,90 +89,123 @@ public class Products extends AppCompatActivity {
 
 
     public void findProducts() {
+        if (bookTitle.length() > 2)
+        {
+            getBookByName();
+        }
+        else
+        {
+            getAllBooks();
+        }
+    }
+
+    private void getBookByName(){
+        ArrayList<Book> books = new ArrayList<>();
+        ArrayList<String> booksStringPreview = new ArrayList<>();
+        ArrayList<String> booksStringFull = new ArrayList<>();
+        ArrayList<String> booksStringContent = new ArrayList<>();
+        ArrayList<String> booksTitles = new ArrayList<>();
+
+        db.collection("Books").whereEqualTo("Title", bookTitle)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                books.add(document.toObject(Book.class));
+                            }
+                            for (int i = 0; i < books.size(); i++) {
+                                booksStringPreview.add(books.get(i).toStringPreview());
+                                booksStringFull.add(books.get(i).toStringFull());
+                                booksStringContent.add(books.get(i).getContent());
+                                booksTitles.add(books.get(i).getTitle());
+                            }
+
+                            Collections.sort(booksTitles);
+                            Collections.sort(booksStringPreview);
+                            Collections.sort(booksStringFull);
+                            Collections.sort(booksStringContent);
+                            books.sort(new Comparator<Book>() {
+                                @Override
+                                public int compare(Book o1, Book o2) {
+                                    return o1.getTitle().compareTo(o2.getTitle());
+                                }
+                            });
+
+
+                            ArrayAdapter adapter = new ArrayAdapter<String>(Products.this,
+                                    android.R.layout.simple_list_item_1, booksStringPreview);
+                            booksList.setAdapter(adapter);
+
+                            booksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent i = new Intent(Products.this, ProductDetails.class);
+                                    i.putExtra("Points", books.get(position).getPoints());
+                                    i.putExtra("Title", books.get(position).getTitle());
+                                    i.putExtra("Book", booksStringFull.get(position));
+                                    i.putExtra("Content", booksStringContent.get(position));
+                                    startActivity(i);
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void getAllBooks(){
         ArrayList<Book> books = new ArrayList<>();
         ArrayList<String> booksStringPreview = new ArrayList<>();
         ArrayList<String> booksStringFull = new ArrayList<>();
         ArrayList<String> booksStringContent = new ArrayList<>();
 
-        if (bookTitle.length() > 2)
-        {
-            db.collection("Books").whereEqualTo("Title", bookTitle)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                    books.add(document.toObject(Book.class));
-                                }
-                                for (int i = 0; i < books.size(); i++) {
-                                    booksStringPreview.add(books.get(i).toStringPreview());
-                                    booksStringFull.add(books.get(i).toStringFull());
-                                    booksStringContent.add(books.get(i).getContent());
-                                }
-
-                                Collections.sort(booksStringPreview);
-                                Collections.sort(booksStringFull);
-                                Collections.sort(booksStringContent);
-
-                                ArrayAdapter adapter = new ArrayAdapter<String>(Products.this,
-                                        android.R.layout.simple_list_item_1, booksStringPreview);
-                                booksList.setAdapter(adapter);
-
-                                booksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Intent i = new Intent(Products.this, ProductDetails.class);
-                                        i.putExtra("Book", booksStringFull.get(position));
-                                        i.putExtra("Content", booksStringContent.get(position));
-                                        startActivity(i);
-                                    }
-                                });
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+        db.collection("Books")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                books.add(document.toObject(Book.class));
                             }
-                        }
-                    });
-        }
-        else
-        {
-            db.collection("Books")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                    books.add(document.toObject(Book.class));
-                                }
-                                for (int i = 0; i < books.size(); i++) {
-                                    booksStringPreview.add(books.get(i).toStringPreview());
-                                    booksStringFull.add(books.get(i).toStringFull());
-                                    booksStringContent.add(books.get(i).getContent());
-                                }
-
-                                Collections.sort(booksStringPreview);
-                                Collections.sort(booksStringFull);
-                                Collections.sort(booksStringContent);
-
-                                ArrayAdapter adapter = new ArrayAdapter<String>(Products.this,
-                                        android.R.layout.simple_list_item_1, booksStringPreview);
-                                booksList.setAdapter(adapter);
-
-                                booksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Intent i = new Intent(Products.this, ProductDetails.class);
-                                        i.putExtra("Book", booksStringFull.get(position));
-                                        i.putExtra("Content", booksStringContent.get(position));
-                                        startActivity(i);
-                                    }
-                                });
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            for (int i = 0; i < books.size(); i++) {
+                                booksStringPreview.add(books.get(i).toStringPreview());
+                                booksStringFull.add(books.get(i).toStringFull());
+                                booksStringContent.add(books.get(i).getContent());
                             }
+
+                            Collections.sort(booksStringPreview);
+                            Collections.sort(booksStringFull);
+                            Collections.sort(booksStringContent);
+                            books.sort(new Comparator<Book>() {
+                                @Override
+                                public int compare(Book o1, Book o2) {
+                                    return o1.getTitle().compareTo(o2.getTitle());
+                                }
+                            });
+
+                            ArrayAdapter adapter = new ArrayAdapter<String>(Products.this,
+                                    android.R.layout.simple_list_item_1, booksStringPreview);
+                            booksList.setAdapter(adapter);
+
+                            booksList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent i = new Intent(Products.this, ProductDetails.class);
+                                    i.putExtra("Points", books.get(position).getPoints());
+                                    i.putExtra("Title", books.get(position).getTitle());
+                                    i.putExtra("Book", booksStringFull.get(position));
+                                    i.putExtra("Content", booksStringContent.get(position));
+                                    startActivity(i);
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    });
-        }
+                    }
+                });
     }
 }

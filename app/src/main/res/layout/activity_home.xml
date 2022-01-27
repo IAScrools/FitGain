@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/srlRefresh"
@@ -53,14 +52,14 @@
             android:id="@+id/kButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start"
-            android:textSize="48sp"
+            android:text="Lista ksiązek"
+            android:textSize="34sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUserCoins"
-            app:layout_constraintVertical_bias="0.6" />
+            app:layout_constraintVertical_bias="0.35" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -87,12 +86,13 @@
             android:id="@+id/bOdblokowane"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Odblokowane"
+            android:text="Odblokowane książki"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kButton" />
+            app:layout_constraintTop_toBottomOf="@+id/kButton"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

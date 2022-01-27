@@ -86,7 +86,7 @@ public class Home extends AppCompatActivity {
             } else {
                 coins.setTextSize(16);
                 coins.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                coins.setText("Nie wczytano jeszcze danych, spróbuj odświeżyć aplikację");
+                coins.setText("Nie wczytano jeszcze danych, spróbuj odświeżyć aplikację!");
                 stepCount.setText("");
             }
         });

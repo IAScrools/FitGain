@@ -76,10 +76,9 @@ public class UnlockedBooks extends AppCompatActivity {
                 if(task.isSuccessful()){
                     DocumentSnapshot user = task.getResult();
                     List<String> list = (List<String>) user.get("books");
-                    Log.d("UNLOCKED BOOKS", "chuj " + list.size());
-                    if(list.size() == 0){
+                    if(list == null) {
                         return;
-                    }else{
+                    } else if (list.size() > 0) {
                         db.collection("Books")
                                 .whereIn("Title", list)
                                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -89,13 +88,11 @@ public class UnlockedBooks extends AppCompatActivity {
                                     for(QueryDocumentSnapshot document: task.getResult()){
                                         books.add(document.toObject(Book.class));
                                     }
-                                    Log.d("UNLOCKED BOOKS", "chuj1 ");
                                     for (int i = 0; i < books.size(); i++) {
                                         booksStringPreview.add(books.get(i).toStringPreview());
                                         booksStringFull.add(books.get(i).toStringFull());
                                         booksStringContent.add(books.get(i).getContent());
                                     }
-                                    Log.d("UNLOCKED BOOKS", "chuj2 " + booksStringContent.get(1));
                                     Collections.sort(booksStringPreview);
                                     Collections.sort(booksStringFull);
                                     Collections.sort(booksStringContent);

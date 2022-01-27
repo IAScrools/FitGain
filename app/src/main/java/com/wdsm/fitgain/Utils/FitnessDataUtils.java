@@ -79,10 +79,7 @@ public class FitnessDataUtils {
                 && PermissionsUtils.checkGoogleFitPermissions(account, fitnessOptions);
     }
 
-    public static void updateStepCount(
-            @NonNull Context context,
-            @NonNull Activity activity
-    ) {
+    public static void updateStepCount(@NonNull Context context, @NonNull Activity activity) {
 
         FitnessOptions fitnessOptions = getStepCountDeltaFitnessOptions();
         GoogleSignInAccount account = PermissionsUtils.getGoogleAccount(context, fitnessOptions);
